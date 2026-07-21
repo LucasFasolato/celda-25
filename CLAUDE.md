@@ -34,6 +34,7 @@ Ejecutar lint + typecheck + test + build antes de cerrar cualquier bloque de tra
 
 ## Decisiones registradas
 
+- **Keys nuevas bajo nombres legacy**: el proyecto real usa el formato nuevo de Supabase (`sb_publishable_...` / `sb_secret_...`). Se guardan bajo las variables existentes `NEXT_PUBLIC_SUPABASE_ANON_KEY` y `SUPABASE_SERVICE_ROLE_KEY` sin renombrar ni duplicar: `supabase-js` acepta ambos formatos y así el código no cambia. Verificado contra la instancia real (anon bloqueada por RLS, secret opera).
 - RLS deny-all + service role en lugar de políticas por fila: el cliente no toca PostgREST, simplifica y endurece.
 - Token de equipo en claro (ver arriba).
 - Bucket `media` público: URLs no adivinables, contenido no sensible; simplifica los reproductores.
