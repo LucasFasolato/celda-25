@@ -8,7 +8,7 @@ import { hmacSign } from "@/lib/crypto";
  */
 async function broadcast(topic: string, event: string, payload: Record<string, unknown> = {}) {
   try {
-    await fetch(`${env.supabaseUrl}/realtime/v1/api/broadcast`, {
+    const res = await fetch(`${env.supabaseUrl}/realtime/v1/api/broadcast`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,8 +17,16 @@ async function broadcast(topic: string, event: string, payload: Record<string, u
       },
       body: JSON.stringify({ messages: [{ topic, event, payload }] }),
     });
-  } catch {
-    // Realtime es best-effort: los clientes tienen polling de respaldo.
+    // Realtime es best-effort (los clientes tienen polling de respaldo), pero
+    // un fallo silencioso es difícil de diagnosticar. Avisamos sin exponer el
+    // token: solo el tipo de canal y el estado.
+    if (!res.ok) {
+      console.warn(`[realtime] broadcast ${topic.split(":")[0]}/${event} -> HTTP ${res.status}`);
+    }
+  } catch (err) {
+    console.warn(
+      `[realtime] broadcast ${topic.split(":")[0]}/${event} -> ${err instanceof Error ? err.message : "error"}`
+    );
   }
 }
 
