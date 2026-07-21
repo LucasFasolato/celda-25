@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cell-bg: #0c0e10;
+  --color-cell-panel: #14171b;
+  --color-cell-border: #2a2f36;
+  --color-cell-amber: #f5a623;
+  --color-cell-red: #e5484d;
+  --color-cell-green: #46d160;
+  --color-cell-text: #d3d7dc;
+  --color-cell-muted: #7d8590;
+  --font-mono: "Courier New", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html {
+  background: var(--color-cell-bg);
+  color: var(--color-cell-text);
+}
+
+body {
+  font-family: var(--font-mono);
+  min-height: 100dvh;
+}
+
+/* Textura de muro de cemento sutil */
+.concrete {
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(255, 255, 255, 0.015) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+    linear-gradient(180deg, #0c0e10 0%, #0a0c0e 100%);
+}
+
+/* Scanlines de cámara de seguridad */
+.scanlines::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.08) 3px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+/* Glitch para el canal intervenido */
+@keyframes glitch {
+  0%, 100% { transform: translate(0); opacity: 1; }
+  20% { transform: translate(-3px, 2px); opacity: 0.8; }
+  40% { transform: translate(3px, -2px); opacity: 0.9; }
+  60% { transform: translate(-2px, -1px); opacity: 0.7; }
+  80% { transform: translate(2px, 1px); opacity: 0.95; }
+}
+.glitch { animation: glitch 0.35s infinite steps(2); }
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.6; }
+  94% { opacity: 1; }
+  97% { opacity: 0.8; }
+}
+.flicker { animation: flicker 4s infinite; }
+
+/* Luz de emergencia */
+@keyframes emergency {
+  0%, 100% { box-shadow: 0 0 12px rgba(229, 72, 77, 0.4); }
+  50% { box-shadow: 0 0 28px rgba(229, 72, 77, 0.9); }
+}
+.emergency { animation: emergency 1.2s infinite; }
+
+/* Rejas abriéndose (fuga completada) */
+@keyframes bars-open-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-105%); }
+}
+@keyframes bars-open-right {
+  from { transform: translateX(0); }
+  to { transform: translateX(105%); }
+}
+.bars-left { animation: bars-open-left 2.4s ease-in-out forwards; animation-delay: 0.6s; }
+.bars-right { animation: bars-open-right 2.4s ease-in-out forwards; animation-delay: 0.6s; }
+
+.prison-bars {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 34px,
+    #1c2126 34px,
+    #30363d 38px,
+    #1c2126 42px
+  );
+}
+
+/* Confeti simple */
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0.4; }
+}
+.confetti {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  z-index: 60;
+  animation: confetti-fall linear infinite;
+}
+
+/* Sello CONFIDENCIAL */
+.stamp {
+  border: 3px solid var(--color-cell-red);
+  color: var(--color-cell-red);
+  transform: rotate(-8deg);
+  letter-spacing: 0.3em;
+  opacity: 0.85;
+}
+
+@keyframes access-granted {
+  0% { opacity: 0; transform: scale(0.8); }
+  60% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.access-granted { animation: access-granted 0.6s ease-out forwards; }
+
+input, button, textarea, select { font-family: inherit; }
