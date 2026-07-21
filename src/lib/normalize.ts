@@ -12,10 +12,25 @@ export function normalizeCode(raw: string): string {
     .toUpperCase();
 }
 
-/** Normaliza un teléfono a formato E.164 sin espacios (+549...). */
+/**
+ * Normaliza un teléfono a E.164 de celular argentino (+54 9 ...).
+ * Reglas:
+ *  - Con `+` explícito se respeta tal cual (el usuario fue explícito).
+ *  - `00` inicial = prefijo internacional → `+`.
+ *  - `0` inicial (prefijo nacional) y `15` de celular viejo se descartan.
+ *  - A un número nacional argentino se le antepone `+54 9` (el `9` es el
+ *    indicador de móvil que WhatsApp exige); si ya trae `54`/`9` no se duplica.
+ */
 export function normalizePhone(raw: string): string {
-  const cleaned = raw.replace(/[\s\-().]/g, "");
-  if (cleaned.startsWith("+")) return cleaned;
-  if (cleaned.startsWith("54")) return `+${cleaned}`;
-  return cleaned ? `+54${cleaned}` : "";
+  let s = raw.replace(/[^\d+]/g, "");
+  if (!s) return "";
+  if (s.startsWith("00")) s = `+${s.slice(2)}`;
+  if (s.startsWith("+")) return s;
+  if (s.startsWith("0")) s = s.slice(1);
+  if (s.startsWith("54")) {
+    const rest = s.slice(2);
+    return `+54${rest.startsWith("9") ? rest : `9${rest}`}`;
+  }
+  if (s.startsWith("9")) return `+54${s}`;
+  return `+549${s}`;
 }

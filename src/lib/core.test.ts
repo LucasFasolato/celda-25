@@ -24,6 +24,21 @@ describe("normalizePhone", () => {
   it("respeta E.164 existente", () => {
     expect(normalizePhone("+54 9 11 2233 4455")).toBe("+5491122334455");
   });
+  it("agrega el 9 de celular a un número local sin prefijo", () => {
+    expect(normalizePhone("11 2233 4455")).toBe("+5491122334455");
+  });
+  it("descarta el 0 nacional y agrega +54 9", () => {
+    expect(normalizePhone("011 2233 4455")).toBe("+5491122334455");
+  });
+  it("no duplica el 9 cuando ya viene con 54 9", () => {
+    expect(normalizePhone("5491122334455")).toBe("+5491122334455");
+  });
+  it("agrega el 9 cuando viene 54 sin 9", () => {
+    expect(normalizePhone("541122334455")).toBe("+5491122334455");
+  });
+  it("string vacío queda vacío", () => {
+    expect(normalizePhone("  ")).toBe("");
+  });
 });
 
 describe("hashCode/verifyCode", () => {

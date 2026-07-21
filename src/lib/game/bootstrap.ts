@@ -57,7 +57,9 @@ export async function ensureGame(): Promise<GameRow> {
       Array.from({ length: 6 }, (_, i) => ({
         team_id: team.id,
         name: `[DEMO] Jugador ${letter}${i + 1}`,
-        phone_e164: "",
+        // Teléfono de ejemplo (rango de test) para que la tanda simulada
+        // funcione de punta a punta en la demo. Reemplazar antes del evento.
+        phone_e164: `+54911${index === 0 ? "1000" : "2000"}${String(i + 1).padStart(4, "0")}`,
         role: `[DEMO] Rol ${i + 1}`,
         credential_code_hash: hashCode(`DEMO-${letter}${i + 1}`),
         clue_location: `[DEMO] Escondite ${i + 1}`,
